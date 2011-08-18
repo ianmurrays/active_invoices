@@ -6,9 +6,9 @@ ActiveInvoices::Application.routes.draw do
   devise_for :admin_users, ActiveAdmin::Devise.config
   
   # Quick fix for the logout link
-  devise_scope :admin_user do
-      get '/admin/logout', :to => 'active_admin/devise/sessions#destroy'
-  end
+  # devise_scope :admin_user do
+  #     get '/admin/logout', :to => 'active_admin/devise/sessions#destroy'
+  # end
   
   root :to => "welcome#index"
 
