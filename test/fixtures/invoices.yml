@@ -1,0 +1,21 @@
+# Read about fixtures at http://ar.rubyonrails.org/classes/Fixtures.html
+
+one:
+  code: MyString
+  notes: MyText
+  terms: MyText
+  status: MyString
+  due_date: 2011-08-18 18:02:52
+  tax: 1.5
+  discount: 1.5
+  client_id: 1
+
+two:
+  code: MyString
+  notes: MyText
+  terms: MyText
+  status: MyString
+  due_date: 2011-08-18 18:02:52
+  tax: 1.5
+  discount: 1.5
+  client_id: 1
