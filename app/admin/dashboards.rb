@@ -16,11 +16,13 @@ ActiveAdmin::Dashboards.build do
   #   end
   
   # == Render Partial Section
-  # The block is rendererd within the context of the view, so you can
+  # The block is rendered within the context of the view, so you can
   # easily render a partial rather than build content in ruby.
   #
   #   section "Recent Posts" do
-  #     render 'recent_posts' # => this will render /app/views/admin/dashboard/_recent_posts.html.erb
+  #     div do
+  #       render 'recent_posts' # => this will render /app/views/admin/dashboard/_recent_posts.html.erb
+  #     end
   #   end
   
   # == Section Ordering
