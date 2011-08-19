@@ -1,4 +1,17 @@
 ActiveAdmin.register Invoice do
+  scope :all, :default => true
+  scope :draft do |invoices|
+    invoices.where(:status => Invoice::STATUS_DRAFT)
+  end
+
+  scope :sent do |invoices|
+    invoices.where(:status => Invoice::STATUS_SENT)
+  end
+  
+  scope :paid do |invoices|
+    invoices.where(:status => Invoice::STATUS_PAID)
+  end
+  
   index do
     column :id
     column :code do |invoice|
