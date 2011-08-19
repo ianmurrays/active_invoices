@@ -6,7 +6,7 @@ class Invoice < ActiveRecord::Base
   belongs_to :client
   has_many :items, :dependent => :destroy
   
-  accepts_nested_attributes_for :items
+  accepts_nested_attributes_for :items, :allow_destroy => true
   
   validates :code, :client_id, :presence => true
   validates :status, :inclusion => { :in => [STATUS_PAID, STATUS_SENT, STATUS_DRAFT], :message => "You need to pick one status." }
@@ -27,5 +27,33 @@ class Invoice < ActiveRecord::Base
       "Sent" => STATUS_SENT,
       "Paid" => STATUS_PAID
     }
+  end
+  
+  def items_total
+    items_total = 0
+    self.items.each do |i|
+      items_total += i.total
+    end
+    items_total
+  end
+  
+  def total
+    items_total * (1 - self.discount / 100) * (1 + self.tax / 100)
+  end
+  
+  def subtotal
+    items_total * (1 - self.discount / 100)
+  end
+  
+  def taxes
+    subtotal * (self.tax / 100)
+  end
+  
+  def status_tag
+    case self.status
+      when STATUS_DRAFT then :error
+      when STATUS_SENT then :warning
+      when STATUS_PAID then :ok
+    end
   end
 end

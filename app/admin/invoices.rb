@@ -1,4 +1,89 @@
 ActiveAdmin.register Invoice do
+  index do
+    column :id
+    column :code do |invoice|
+      link_to "##{invoice.code}", admin_invoice_path(invoice)
+    end
+    column :status do |invoice|
+      status_tag invoice.status, invoice.status_tag
+    end
+    
+    column :due_date
+    column :total do |invoice|
+      number_to_currency invoice.total
+    end
+    
+    column do |invoice|
+      link_to("Details", admin_invoice_path(invoice)) + " | " + \
+      link_to("Edit", edit_admin_invoice_path(invoice)) + " | " + \
+      link_to("Delete", admin_invoice_path(invoice), :method => :delete, :confirm => "Are you sure?")
+    end
+  end
+  
+  show :title => :code do
+    panel "Invoice Details" do
+      attributes_table_for invoice do
+        row("Code") { invoice.code }
+        row("Status") { status_tag invoice.status, invoice.status_tag }
+        row("Due Date") { invoice.due_date }
+      end
+    end
+    
+    panel "Items" do
+      table_for invoice.items do |t|
+        t.column("Qty.") { |item| number_with_delimiter item.quantity }
+        t.column("Description") { |item| item.description }
+        t.column("Per Unit") { |item| number_to_currency item.amount }
+        t.column("Total") { |item| number_to_currency item.total}
+        
+        # Show the tax, discount, subtotal and total
+        tr do
+          2.times { td "" }
+          td "Discount:", :style => "text-align:right; font-weight: bold;"
+          td "#{number_with_delimiter(invoice.discount)}%"
+        end
+        
+        tr do
+          2.times { td "" }
+          td "Sub-total:", :style => "text-align:right; font-weight: bold;"
+          td "#{number_to_currency(invoice.subtotal)}%"
+        end
+        
+        tr do
+          2.times { td "" }
+          td "Taxes:", :style => "text-align:right; font-weight: bold;"
+          td "#{number_to_currency(invoice.taxes)} (#{number_with_delimiter(invoice.tax)}%)"
+        end
+        
+        tr do
+          2.times { td "" }
+          td "Total:", :style => "text-align:right; font-weight: bold;"
+          td "#{number_to_currency(invoice.total)}%", :style => "font-weight: bold;"
+        end
+      end
+    end
+    
+    panel "Other" do
+      attributes_table_for invoice do
+        row("Terms") { simple_format invoice.terms }
+        row("Notes") { simple_format invoice.notes }
+      end
+    end
+  end
+  
+  sidebar "Bill To", :only => :show do
+    attributes_table_for invoice.client do
+      row("Name") { link_to invoice.client.name, admin_client_path(invoice.client) }
+      row("Email") { mail_to invoice.client.email }
+      row("Address") { invoice.client.address }
+      row("Phone") { invoice.client.phone }
+    end
+  end
+  
+  sidebar "Total", :only => :show do
+    h1 number_to_currency(invoice.total), :style => "text-align: center; margin-top: 20px"
+  end
+  
   form do |f|
     f.inputs "Client" do
       f.input :client
@@ -6,6 +91,7 @@ ActiveAdmin.register Invoice do
     
     f.inputs "Items" do
       f.has_many :items do |i|
+        i.input :_destroy, :as => :boolean, :label => "Delete this item" unless i.object.id.nil?
         i.input :quantity
         i.input :description
         i.input :amount
@@ -13,11 +99,11 @@ ActiveAdmin.register Invoice do
     end
     
     f.inputs "Options" do
-      f.input :code, :hint => "The invoice's code, should be incremental. Suggested code supplied.", :input_html => {:value => Invoice.suggest_code}
+      f.input :code, :hint => "The invoice's code, should be incremental. Suggested code: #{Invoice.suggest_code}"
       f.input :status, :collection => Invoice.status_collection, :as => :radio
       f.input :due_date
-      f.input :tax, :input_html => { :style => "width: 20px", :value => "0"}, :hint => "This should be a percentage, from 0 to 100 (without the % sign)"
-      f.input :discount, :input_html => { :style => "width: 20px", :value => "0"}, :hint => "This should be a percentage, from 0 to 100 (without the % sign)"
+      f.input :tax, :input_html => { :style => "width: 30px"}, :hint => "This should be a percentage, from 0 to 100 (without the % sign)"
+      f.input :discount, :input_html => { :style => "width: 30px"}, :hint => "This should be a percentage, from 0 to 100 (without the % sign)"
     end
     
     f.inputs "Other Fields" do
