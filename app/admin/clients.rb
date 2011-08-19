@@ -30,4 +30,16 @@ ActiveAdmin.register Client do
       attributes_table_for client, :name, :email, :address, :phone
     end
   end
+
+  sidebar "Total Billed", :only => :show do
+    h1 number_to_currency(Invoice.where(:client_id => client.id).all.sum(&:total)), :style => "text-align: center; margin-top: 20px;"
+  end
+  
+  sidebar "Latest Invoices", :only => :show do
+    table_for Invoice.where(:client_id => client.id).order('created_at desc').limit(5).all do |t|
+      t.column("Code") { |invoice| link_to "##{invoice.code}", admin_invoice_path(invoice) }
+      t.column("Status") { |invoice| status_tag invoice.status, invoice.status_tag }
+      t.column("Total") { |invoice| number_to_currency invoice.total }
+    end
+  end
 end
