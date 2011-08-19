@@ -1,4 +1,33 @@
 ActiveAdmin::Dashboards.build do
+  
+  section "Statistics" do
+    div :class => "attributes_table" do
+      table do
+        tr do
+          th "Invoices This Month"
+          td number_with_delimiter(Invoice.this_month.count)
+        end
+    
+        tr do
+          th "Invoices Paid This Month"
+          td number_with_delimiter(Invoice.this_month.where(:status => Invoice::STATUS_PAID).count)
+        end
+    
+        tr do
+          th "Income This Month"
+          td number_to_currency(Invoice.this_month.where(:status => Invoice::STATUS_PAID).all.sum(&:total)), :style => "font-weight: bold;"
+        end
+      end
+    end
+  end
+  
+  section "Latest Invoices" do
+    table_for Invoice.order('created_at desc').limit(5).all do |t|
+      t.column("Client") { |invoice| link_to invoice.client.name, admin_client_path(invoice.client) }
+      t.column("Status") { |invoice| status_tag invoice.status, invoice.status_tag }
+      t.column("Total") { |invoice| number_to_currency invoice.total }
+    end
+  end
 
   # Define your dashboard sections here. Each block will be
   # rendered on the dashboard in the context of the view. So just
