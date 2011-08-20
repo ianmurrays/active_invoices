@@ -5,7 +5,6 @@ ActiveAdmin.register Client do
   filter :phone
   
   index do
-    column :id
     column :name
     column :email do |client|
       if client.email 
@@ -27,7 +26,12 @@ ActiveAdmin.register Client do
   
   show :title => :name do
     panel "Client Details" do
-      attributes_table_for client, :name, :email, :address, :phone
+      attributes_table_for client do
+        row("Name") { client.name }
+        row("Email") { mail_to client.email }
+        row("Address") { client.address }
+        row("Phone") { client.phone }
+      end
     end
   end
 
@@ -37,8 +41,8 @@ ActiveAdmin.register Client do
   
   sidebar "Latest Invoices", :only => :show do
     table_for Invoice.where(:client_id => client.id).order('created_at desc').limit(5).all do |t|
-      t.column("Code") { |invoice| link_to "##{invoice.code}", admin_invoice_path(invoice) }
       t.column("Status") { |invoice| status_tag invoice.status, invoice.status_tag }
+      t.column("Code") { |invoice| link_to "##{invoice.code}", admin_invoice_path(invoice) }
       t.column("Total") { |invoice| number_to_currency invoice.total }
     end
   end

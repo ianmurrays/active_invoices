@@ -23,9 +23,9 @@ ActiveAdmin::Dashboards.build do
   
   section "Latest Invoices" do
     table_for Invoice.order('created_at desc').limit(5).all do |t|
+      t.column("Status") { |invoice| status_tag invoice.status, invoice.status_tag }
       t.column("Code") { |invoice| link_to "##{invoice.code}", admin_invoice_path(invoice) }
       t.column("Client") { |invoice| link_to invoice.client.name, admin_client_path(invoice.client) }
-      t.column("Status") { |invoice| status_tag invoice.status, invoice.status_tag }
       t.column("Total") { |invoice| number_to_currency invoice.total }
     end
   end

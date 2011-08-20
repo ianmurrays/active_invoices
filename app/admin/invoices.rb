@@ -13,15 +13,24 @@ ActiveAdmin.register Invoice do
   end
   
   index do
-    column :id
-    column :code do |invoice|
-      link_to "##{invoice.code}", admin_invoice_path(invoice)
-    end
     column :status do |invoice|
       status_tag invoice.status, invoice.status_tag
     end
+    column :code do |invoice|
+      link_to "##{invoice.code}", admin_invoice_path(invoice)
+    end
     
-    column :due_date
+    column :client
+    
+    column "Issued" do |invoice|
+      due = if invoice.due_date
+        " (due in #{distance_of_time_in_words Time.now, invoice.due_date})"
+      else
+        ""
+      end
+      
+      "#{l invoice.created_at, :format => :short}" + due
+    end
     column :total do |invoice|
       number_to_currency invoice.total
     end
@@ -38,6 +47,7 @@ ActiveAdmin.register Invoice do
       attributes_table_for invoice do
         row("Code") { invoice.code }
         row("Status") { status_tag invoice.status, invoice.status_tag }
+        row("Issue Date") { invoice.created_at }
         row("Due Date") { invoice.due_date }
       end
     end
