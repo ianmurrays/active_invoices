@@ -62,4 +62,8 @@ class Invoice < ActiveRecord::Base
       when STATUS_PAID then :ok
     end
   end
+  
+  def invoice_location
+    "#{Rails.root}/pdfs/invoice-#{self.code}.pdf"
+  end
 end

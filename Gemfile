@@ -8,6 +8,7 @@ gem 'rails', '3.0.9'
 gem 'sqlite3'
 
 gem 'activeadmin', :git => 'git://github.com/gregbell/active_admin.git'
+gem 'prawn' # Generates PDF files
 
 # Use unicorn as the web server
 # gem 'unicorn'
