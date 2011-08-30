@@ -38,5 +38,15 @@ module ActiveInvoices
 
     # Configure sensitive parameters which will be filtered from the log file.
     config.filter_parameters += [:password]
+    
+    # Load configuration files, with smtp settings.
+    def config.from_file(file)
+      super
+      
+      action_mailer.delivery_method = :smtp
+      action_mailer.smtp_settings = smtp_settings.inject({}){|memo,(k,v)| memo[k.to_sym] = v; memo}
+    end
+    
+    config.from_file 'settings.yml'
   end
 end

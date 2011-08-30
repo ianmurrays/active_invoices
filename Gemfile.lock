@@ -46,6 +46,8 @@ GEM
     arel (2.0.10)
     bcrypt-ruby (2.1.4)
     builder (2.1.2)
+    choices (0.2.4)
+      hashie (>= 0.4.0)
     devise (1.4.2)
       bcrypt-ruby (~> 2.1.2)
       orm_adapter (~> 0.0.3)
@@ -58,6 +60,7 @@ GEM
       activesupport (>= 2.3.7)
       i18n (~> 0.4)
     has_scope (0.5.1)
+    hashie (1.0.0)
     i18n (0.5.0)
     inherited_resources (1.2.2)
       has_scope (~> 0.5.0)
@@ -120,6 +123,7 @@ PLATFORMS
 
 DEPENDENCIES
   activeadmin!
+  choices
   prawn
   rails (= 3.0.9)
   sqlite3

@@ -1,0 +1,73 @@
+<%
+invoice_message = <<MSG
+
+
+
+-----------------------------
+Invoice Summary
+-----------------------------
+
+Invoice Code: #{@invoice.code}
+Issued: #{l @invoice.created_at, :format => :short}
+Due: #{l @invoice.due_date, :format => :short}
+Amount: #{number_to_currency @invoice.total}
+
+
+Thank You!
+-----------------------------
+
+MSG
+%>
+
+<%= form_tag dispatch_invoice_admin_invoice_path(@invoice) do %>
+  <fieldset class="inputs">
+    <legend><span>Recipients</span></legend>
+    <ol>
+      <li class="string required">
+        <%= label_tag :recipients %>
+        <%= text_field_tag :recipients, @invoice.client.email %>
+        <p class="inline-hints">Comma-separated list of emails.</p>
+      </li>
+      
+      <li class="boolean">
+        <label for="send_copy">
+          <%= check_box_tag :send_copy, "send" %>
+          Send me a copy
+        </label>
+      </li>
+    </ol>
+  </fieldset>
+  
+  <fieldset class="inputs">
+    <legend><span>Message</span></legend>
+    <ol>
+      <li class="string required">
+        <%= label_tag :subject %>
+        <%= text_field_tag :subject, "Invoice ##{@invoice.code}" %>
+      </li>
+      
+      <li class="textarea required">
+        <%= label_tag :message %>
+        <%= text_area_tag :message, invoice_message, :rows => 10 %>
+      </li>
+      
+      <li class="boolean">
+        <label for="attach_pdf">
+          <%= check_box_tag :attach_pdf, "attach", true %>
+          Attach Invoice as PDF
+        </label>
+      </li>
+    </ol>
+  </fieldset>
+  
+  <fieldset class="buttons">
+    <ol>
+      <li class="commit">
+        <%= submit_tag "Send Invoice" %>
+      </li>
+      <li class="cancel">
+        <%= link_to "Cancel", admin_invoice_path(@invoice) %>
+      </li>
+    </ol>
+  </fieldset>
+<% end %>

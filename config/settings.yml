@@ -1,0 +1,28 @@
+defaults: &defaults
+  # The email's sender address.
+  sender: from@example.org
+  
+  # Outgoing email configuration
+  # Taken from Teambox's config file
+  smtp_settings:
+    :domain:         example.org       # the domain your emails will come from
+    :address:        mail.mail.com  # SMTP server used to send emails
+    :port:           587
+    :authentication: :plain
+    :user_name:      username
+    :password:       password
+
+    # Set to true when using Gmail
+    :enable_starttls_auto: true
+
+    # Set to true if you have Net::SMTPSyntaxError errors when sending email.
+    # Rails has sometimes a problem when sending email from "Name <address@host.com>".
+    # If you are having problems sending email and your host is correctly configured,
+    # try setting safe_from to true. You may need to create a user account for no-reply@yourapp.com
+    :safe_from: false
+
+development:
+  <<: *defaults
+
+test: &testing
+  <<: *defaults

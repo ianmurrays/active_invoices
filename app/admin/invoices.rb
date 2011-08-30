@@ -110,11 +110,12 @@ ActiveAdmin.register Invoice do
     end
   end
   
+  # -----------------------------------------------------------------------------------
+  # PDF
   
   action_item :only => :show do
     link_to "Generate PDF", generate_pdf_admin_invoice_path(resource)
   end
-  
   
   member_action :generate_pdf do
     @invoice = Invoice.find(params[:id])
@@ -124,6 +125,41 @@ ActiveAdmin.register Invoice do
     send_file @invoice.invoice_location
   end
   
+  # -----------------------------------------------------------------------------------
+  
+  # -----------------------------------------------------------------------------------
+  # Email sending
+  
+  action_item :only => :show do
+    link_to "Send", send_invoice_admin_invoice_path(resource)
+  end
+  
+  member_action :send_invoice do
+    @invoice = Invoice.find(params[:id])
+  end
+  
+  member_action :dispatch_invoice, :method => :post do
+    @invoice = Invoice.find(params[:id])
+    
+    # Generate the PDF invoice if neccesary
+    generate_invoice(@invoice) if params[:attach_pdf]
+    
+    # Attach our own email if we want to send a copy to ourselves.
+    params[:recipients] += ", #{current_admin_user.email}" if params[:send_copy]
+    
+    # Send all emails
+    params[:recipients].split(',').each do |recipient|
+      InvoicesMailer.send_invoice(@invoice.id, recipient.strip, params[:subject], params[:message], !!params[:attach_pdf]).deliver
+    end
+    
+    # Change invoice status to sent
+    @invoice.status = Invoice::STATUS_SENT
+    @invoice.save
+    
+    redirect_to admin_invoice_path(@invoice), :notice => "Invoice sent succesfully"
+  end
+  
+  # -----------------------------------------------------------------------------------
   
   show :title => :code do
     panel "Invoice Details" do
