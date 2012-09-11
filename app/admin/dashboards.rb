@@ -5,24 +5,24 @@ ActiveAdmin::Dashboards.build do
       table do
         tr do
           th "Invoices This Month"
-          td number_with_delimiter(Invoice.this_month.count)
+          td number_with_delimiter(current_admin_user.invoices.this_month.count)
         end
     
         tr do
           th "Invoices Paid This Month"
-          td number_with_delimiter(Invoice.this_month.where(:status => Invoice::STATUS_PAID).count)
+          td number_with_delimiter(current_admin_user.invoices.this_month.where(:status => Invoice::STATUS_PAID).count)
         end
     
         tr do
           th "Income This Month"
-          td number_to_currency(Invoice.this_month.where(:status => Invoice::STATUS_PAID).all.sum(&:total)), :style => "font-weight: bold;"
+          td number_to_currency(current_admin_user.invoices.this_month.where(:status => Invoice::STATUS_PAID).all.sum(&:total)), :style => "font-weight: bold;"
         end
       end
     end
   end
   
   section "Latest Invoices" do
-    table_for Invoice.order('created_at desc').limit(5).all do |t|
+    table_for current_admin_user.invoices.order('created_at desc').limit(5).all do |t|
       t.column("Status") { |invoice| status_tag invoice.status, invoice.status_tag }
       t.column("Code") { |invoice| link_to "##{invoice.code}", admin_invoice_path(invoice) }
       t.column("Client") { |invoice| link_to invoice.client.name, admin_client_path(invoice.client) }

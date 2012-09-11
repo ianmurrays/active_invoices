@@ -1,5 +1,6 @@
 class Organization < ActiveRecord::Base
   has_many :clients, :dependent => :destroy
+  belongs_to :admin_user
 
   validates :name, :presence => true
 
