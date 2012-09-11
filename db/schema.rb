@@ -11,7 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20110818222838) do
+ActiveRecord::Schema.define(:version => 20120911024001) do
 
   create_table "active_admin_comments", :force => true do |t|
     t.integer  "resource_id",   :null => false
@@ -51,8 +51,9 @@ ActiveRecord::Schema.define(:version => 20110818222838) do
     t.string   "address"
     t.string   "phone"
     t.string   "email"
-    t.datetime "created_at", :null => false
-    t.datetime "updated_at", :null => false
+    t.datetime "created_at",      :null => false
+    t.datetime "updated_at",      :null => false
+    t.integer  "organization_id"
   end
 
   create_table "invoices", :force => true do |t|
@@ -75,6 +76,20 @@ ActiveRecord::Schema.define(:version => 20110818222838) do
     t.integer  "invoice_id"
     t.datetime "created_at",  :null => false
     t.datetime "updated_at",  :null => false
+  end
+
+  create_table "organizations", :force => true do |t|
+    t.string   "name"
+    t.string   "street_1"
+    t.string   "street_2"
+    t.string   "city"
+    t.string   "state"
+    t.string   "country"
+    t.string   "zip_code"
+    t.string   "business_phone"
+    t.string   "fax"
+    t.datetime "created_at",     :null => false
+    t.datetime "updated_at",     :null => false
   end
 
 end

@@ -1,8 +1,6 @@
 ActiveAdmin.register Client do
   filter :name
   filter :email
-  filter :address
-  filter :phone
   
   index do
     column :name
@@ -34,9 +32,6 @@ ActiveAdmin.register Client do
       end
     end
   end
-
-  filter :name
-  filter :email
 
   sidebar "Total Billed", :only => :show do
     h1 number_to_currency(Invoice.where(:client_id => client.id).all.sum(&:total)), :style => "text-align: center; margin-top: 20px;"

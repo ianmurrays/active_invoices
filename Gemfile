@@ -18,6 +18,7 @@ gem 'activeadmin', :git => 'git://github.com/gregbell/active_admin.git'
 gem 'meta_search', '>= 1.1.0.pre'
 gem 'prawn' # Generates PDF files
 gem 'choices' # Configuration files
+gem 'country_select'
 
 # Use unicorn as the web server
 # gem 'unicorn'
