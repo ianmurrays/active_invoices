@@ -1,8 +1,6 @@
 ActiveAdmin.register Client do
   filter :name
   filter :email
-  filter :address
-  filter :phone
   
   index do
     column :name

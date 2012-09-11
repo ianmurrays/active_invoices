@@ -11,6 +11,8 @@ class Invoice < ActiveRecord::Base
   validates :code, :client_id, :presence => true
   validates :status, :inclusion => { :in => [STATUS_PAID, STATUS_SENT, STATUS_DRAFT], :message => "You need to pick one status." }
   validates :tax, :discount, :numericality => { :greater_than_or_equal_to => 0, :less_than_or_equal_to => 100 }
+
+  attr_accessible :client_id, :items_attributes, :code, :status, :due_date, :due_date, :due_date, :due_date, :due_date, :tax, :discount, :terms, :notes
   
   class << self
     def suggest_code
