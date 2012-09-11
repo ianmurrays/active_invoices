@@ -15,9 +15,7 @@ ActiveAdmin.register AdminUser, :as => "Users" do
   end
   
   show :title => :email do 
-    panel "User Details" do
-      attributes_table_for user, :email, :last_sign_in_at, :created_at
-    end
+    attributes_table :email, :last_sign_in_at, :created_at
   end
   
   form do |f|
