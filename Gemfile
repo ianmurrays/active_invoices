@@ -19,6 +19,7 @@ gem 'meta_search', '>= 1.1.0.pre'
 gem 'prawn' # Generates PDF files
 gem 'choices' # Configuration files
 gem 'country_select'
+gem 'cancan'
 
 # Use unicorn as the web server
 # gem 'unicorn'
