@@ -53,6 +53,7 @@ GEM
     bourbon (2.1.1)
       sass (>= 3.1)
     builder (3.0.3)
+    cancan (1.6.8)
     choices (0.2.4)
       hashie (>= 0.4.0)
     coffee-rails (3.2.2)
@@ -168,6 +169,7 @@ PLATFORMS
 
 DEPENDENCIES
   activeadmin!
+  cancan
   choices
   coffee-rails (~> 3.2.1)
   country_select

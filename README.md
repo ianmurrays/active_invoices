@@ -14,7 +14,7 @@ And run the following commands:
 You're going to need to create a user on the database using `irb`:
 
     rails console
-    >> AdminUser.create! :email => "admin@admin.org", :password => "admin", :password_confirmation => "admin"
+    >> AdminUser.create! :email => "admin@admin.org", :password => "admin", :password_confirmation => "admin", :admin => true
     
 You'll need to generate the assets for Active_admin:
 

@@ -232,7 +232,7 @@ ActiveAdmin.register Invoice do
   
   form do |f|
     f.inputs "Client" do
-      f.input :client
+      f.input :client, :collection => current_admin_user.clients
     end
     
     f.inputs "Items" do
@@ -259,4 +259,5 @@ ActiveAdmin.register Invoice do
     
     f.buttons
   end
+
 end
